@@ -1,0 +1,25 @@
+import pandas as pd
+
+df = pd.read_csv("find_s.csv")
+
+df.head()
+
+df.info()
+
+df.shape
+
+df.describe
+
+df.isnull().sum()
+
+X = df.iloc[:,1:-1]
+y = df.iloc[:,-1]
+
+h = X[y=="Yes"].iloc[0].tolist()
+
+for row in X[y=="Yes"].values[1:]:
+    for i in range(len(h)):
+        if h[i] != row[i]:
+            h[i] = "?"
+
+print(h)
