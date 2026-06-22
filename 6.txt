@@ -1,0 +1,20 @@
+import numpy as np
+import matplotlib.pyplot as plt 
+
+np.random.seed(0)
+x=np.linspace(0,10,100)
+y=np.sin(x)+np.random.normal(0,.2,100)
+
+b=np.c_[np.ones(len(x)),x]
+
+def lwr(x,y,t):
+    r=[]
+    for i in range(len(x)):
+        w=np.diag(np.exp(-(x[:,1]-x[i,1])**2/(2*t*t)))
+        theta=np.linalg.pinv(x.T @ w @ x) @ x.T @ w @ y
+        r.append(x[i]@theta)
+    return r
+plt.scatter(x,y,s=10)
+for t in[.1,.5,1]:
+    plt.plot(x,lwr(b,y,t))
+plt.show()
