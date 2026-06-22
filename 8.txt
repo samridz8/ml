@@ -1,0 +1,16 @@
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split 
+from sklearn.tree import DecisionTreeClassifier,plot_tree 
+from sklearn.metrics import accuracy_score 
+import matplotlib.pyplot  as plt 
+
+d = load_breast_cancer()
+x1,x2,y1,y2 = train_test_split(d.data, d.target, test_size=0.3, random_state=42)
+
+m = DecisionTreeClassifier().fit(x1,y1)
+
+print ("Accuracy=",accuracy_score(y2,m.predict(x2)))
+
+
+plot_tree(m,filled=True)
+plt.show()
