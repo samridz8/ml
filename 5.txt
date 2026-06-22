@@ -1,0 +1,52 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from collections import Counter
+
+data = np.random.rand(100)
+
+train_data = data[:50]
+test_data = data[50:]
+
+train_labels = ["class1" if x<=0.5 else "class2" for x in train_data]
+
+def distance(x1,x2):
+    return abs(x1-x2)
+def knn(train_data, train_labels, test_point, k):
+    distances = [(distance(test_point, train_data[i]), train_labels[i]) for i in range(len(train_data))]
+    distances.sort()
+    neighbours = distances[:k]
+    labels = [label for _, label in neighbours]
+    return Counter(labels).most_common(1)[0][0]
+
+k_values = [1,2,3,4,5,20,30]
+
+print("---k_nearest neighbour classification---")
+
+for k in k_values:
+    print(f"Results for k={k}:")
+    predictions = []
+    for i, test_point in enumerate(test_data, start=51):
+        label = knn(train_data, train_labels, test_point, k)
+        predictions.append(label)
+        print(f"point x{i} (values:{test_point:.4f}) is classified as {label}")
+    print("\n")
+
+    class1_point = [test_data[i] for i in range(len(test_data)) if predictions[i]=="class1"]
+    class2_point = [test_data[i] for i in range(len(test_data)) if predictions[i]=="class2"]
+
+    plt.figure()
+
+    plt.scatter(train_data, [0]*len(train_data), c=["blue" if l=="class1" else "red" for l in train_labels], label="training data")
+
+    plt.scatter(class1_point, [1]*len(class1_point), c="blue", marker="x", label="class1 (test)")
+    plt.scatter(class2_point, [1]*len(class2_point), c="red", marker="x", label="class2 (test)")
+
+    plt.title("knn classifier: ")
+    plt.xlabel("data labels")
+    plt.ylabel("levels")
+    plt.grid()
+    plt.legend()
+    plt.show()
+
+    
+        
